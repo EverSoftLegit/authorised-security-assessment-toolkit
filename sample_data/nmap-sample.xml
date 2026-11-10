@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<nmaprun scanner="nmap" args="nmap -sV -oX sample.xml 192.0.2.10" start="0" version="7.95">
+  <host><status state="up" reason="user-set" />
+    <address addr="192.0.2.10" addrtype="ipv4" />
+    <hostnames><hostname name="lab.example.test" type="user" /></hostnames>
+    <ports>
+      <port protocol="tcp" portid="22"><state state="open"/><service name="ssh" product="OpenSSH" version="9.x"/></port>
+      <port protocol="tcp" portid="445"><state state="open"/><service name="microsoft-ds"/></port>
+      <port protocol="tcp" portid="443"><state state="open"/><service name="https" product="nginx"/></port>
+    </ports>
+  </host>
+</nmaprun>

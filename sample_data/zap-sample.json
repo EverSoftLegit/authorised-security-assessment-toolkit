@@ -1,0 +1,21 @@
+{
+  "site": [
+    {
+      "name": "https://app.example.test",
+      "alerts": [
+        {
+          "pluginid": "10021",
+          "alert": "Example: X-Content-Type-Options Header Missing",
+          "risk": "Low",
+          "confidence": "Medium",
+          "desc": "Sample scanner alert for demonstrating report normalisation. This is not a real assessment result.",
+          "solution": "Set X-Content-Type-Options: nosniff where appropriate.",
+          "cweid": "16",
+          "instances": [
+            {"uri": "https://app.example.test/", "method": "GET", "param": "", "evidence": ""}
+          ]
+        }
+      ]
+    }
+  ]
+}

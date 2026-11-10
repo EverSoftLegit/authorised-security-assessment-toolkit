@@ -1,0 +1,15 @@
+{
+  "domains": [
+    "example.test",
+    "*.example.test"
+  ],
+  "cidrs": [
+    "192.0.2.0/24"
+  ],
+  "ports": [
+    80,
+    443,
+    8080,
+    8443
+  ]
+}

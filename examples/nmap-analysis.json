@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "tool": "nmap-xml-analyser",
+  "generated_at": "2026-11-10T12:06:03+00:00",
+  "target": "sample_data/nmap-sample.xml",
+  "findings": [
+    {
+      "title": "Review exposed microsoft-ds port 445",
+      "severity": "MEDIUM",
+      "description": "SMB is exposed; verify network restrictions, patching and share permissions.",
+      "evidence": "Host: 192.0.2.10; port: 445/tcp; service: microsoft-ds; product/version: None None",
+      "recommendation": "Confirm business need, restrict source networks, harden service configuration and validate patch level.",
+      "source": "Nmap XML",
+      "confidence": "Exposure indicator only; not proof of vulnerability"
+    }
+  ],
+  "hosts": [
+    {
+      "addresses": [
+        "192.0.2.10"
+      ],
+      "hostnames": [
+        "lab.example.test"
+      ],
+      "open_ports": [
+        {
+          "protocol": "tcp",
+          "port": 22,
+          "service": "ssh",
+          "product": "OpenSSH",
+          "version": "9.x"
+        },
+        {
+          "protocol": "tcp",
+          "port": 445,
+          "service": "microsoft-ds",
+          "product": null,
+          "version": null
+        },
+        {
+          "protocol": "tcp",
+          "port": 443,
+          "service": "https",
+          "product": "nginx",
+          "version": null
+        }
+      ]
+    }
+  ],
+  "note": "Open ports are exposure observations, not confirmed vulnerabilities. Validate service context manually."
+}
