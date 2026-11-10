@@ -1,0 +1,5 @@
+# Synthetic apktool metadata for demonstration only.
+version: 2.9.3
+sdkInfo:
+  minSdkVersion: '24'
+  targetSdkVersion: '34'

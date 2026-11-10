@@ -9,7 +9,6 @@ Exit codes: 0 completed, 1 completed with errors, 2 bad input.
 from __future__ import annotations
 
 import argparse
-import re
 import sys
 import urllib.parse
 import xml.etree.ElementTree as ET
@@ -18,13 +17,13 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from toolkit.common import (
-    RequestError, Scope, ScopeError, make_finding, result_document, safe_http_request, write_json,
+    RequestError, Scope, ScopeError, make_finding, parse_untrusted_xml, result_document,
+    safe_http_request, write_json,
 )
 
 MAX_SITEMAPS = 5           # documents fetched, including /sitemap.xml
 MAX_URLS = 500             # inventory entries kept
 MAX_IGNORED_SAMPLES = 20   # out-of-scope entries echoed back as examples
-_DTD = re.compile(rb"<!\s*(DOCTYPE|ENTITY)", re.IGNORECASE)
 
 
 def local_name(tag: str) -> str:
@@ -36,12 +35,9 @@ def parse_sitemap(xml_bytes: bytes) -> tuple[list[str], list[str]]:
 
     Only <url>/<loc> and <sitemap>/<loc> are read, so extension elements such
     as <image:image><image:loc> are not mistaken for pages. Documents with a
-    DTD are refused: sitemaps never need one, and refusing it removes
-    entity-expansion tricks without needing a third-party XML library.
+    DTD are refused by parse_untrusted_xml (see toolkit/common.py).
     """
-    if _DTD.search(xml_bytes):
-        raise ValueError("Sitemap contains a DOCTYPE/ENTITY declaration; refusing to parse")
-    root = ET.fromstring(xml_bytes)
+    root = parse_untrusted_xml(xml_bytes)
     kind = local_name(root.tag)
     if kind not in {"urlset", "sitemapindex"}:
         raise ValueError(f"Not a sitemap document (root element <{kind}>)")

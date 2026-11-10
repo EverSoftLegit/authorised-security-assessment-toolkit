@@ -17,6 +17,7 @@ A small Python portfolio project demonstrating practical security-assessment aut
 | `05_nmap_xml_analyzer.py` | Parse existing Nmap XML, flag service-exposure items for review, optionally label out-of-scope hosts | None; offline parser only |
 | `06_zap_json_analyzer.py` | Normalise OWASP ZAP Traditional JSON alerts (affected URIs only; analyst-marked false positives excluded) | None; offline parser only |
 | `07_report_builder.py` | Combine JSON outputs into a Markdown draft report | None; offline report generation |
+| `08_android_manifest_review.py` | Review an apktool-decoded `AndroidManifest.xml` and network security config: debuggable, backup, cleartext, user-CA trust, exported components, custom URL schemes | None; offline review of an APK you decoded |
 
 Shared functionality lives in `toolkit/common.py`.
 
@@ -87,6 +88,17 @@ python3 scripts/06_zap_json_analyzer.py zap-report.json \
   --output output/zap-analysis.json
 ```
 
+### Android manifest review (offline)
+
+Decode an APK you are authorised to test with [apktool](https://apktool.org/), then review the output folder:
+
+```bash
+apktool d app.apk -o app-decoded
+python3 scripts/08_android_manifest_review.py app-decoded --output output/android.json
+```
+
+The script reads `AndroidManifest.xml`, `apktool.yml` (for `targetSdkVersion`, which changes several Android defaults) and the referenced network security config. It does not install, run, or modify the app. A manifest copied straight out of the APK is binary XML and is rejected with a reminder to decode it first. Exported components and settings are leads for dynamic testing, not confirmed vulnerabilities.
+
 ### Generate a Markdown report
 
 ```bash
@@ -153,7 +165,8 @@ Use the provided offline sample files to show the parsers and report builder wit
 mkdir -p output
 python3 scripts/05_nmap_xml_analyzer.py sample_data/nmap-sample.xml --scope scope.example.json --output output/nmap.json
 python3 scripts/06_zap_json_analyzer.py sample_data/zap-sample.json --output output/zap.json
-python3 scripts/07_report_builder.py output/nmap.json output/zap.json --client "Demonstration Lab" --output output/demo-report.md
+python3 scripts/08_android_manifest_review.py sample_data/android --output output/android.json
+python3 scripts/07_report_builder.py output/nmap.json output/zap.json output/android.json --client "Demonstration Lab" --output output/demo-report.md
 ```
 
 The sample findings are synthetic and must be described as demonstrations, not client discoveries.

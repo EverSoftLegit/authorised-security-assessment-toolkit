@@ -12,6 +12,7 @@ import re
 import urllib.error
 import urllib.parse
 import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, NamedTuple
@@ -22,8 +23,21 @@ USER_AGENT = "Authorised-Security-Assessment-Toolkit/1.1 (+scope-controlled)"
 SEVERITIES = ("CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO")
 
 SCOPE_KEYS = {"domains", "cidrs", "ports"}
+_DTD = re.compile(rb"<!\s*(DOCTYPE|ENTITY)", re.IGNORECASE)
 # One DNS label after IDNA encoding: letters, digits, hyphen (underscore tolerated).
 _LABEL = re.compile(r"^[a-z0-9_-]{1,63}$")
+
+
+def parse_untrusted_xml(data: bytes) -> ET.Element:
+    """Parse XML that came from a target (sitemaps, decoded APK files).
+
+    Documents with a DTD are refused: none of the formats this toolkit reads
+    needs one, and refusing it removes entity-expansion tricks without a
+    third-party library. Raises ValueError or ET.ParseError.
+    """
+    if _DTD.search(data):
+        raise ValueError("XML contains a DOCTYPE/ENTITY declaration; refusing to parse")
+    return ET.fromstring(data)
 
 
 class ScopeError(ValueError):

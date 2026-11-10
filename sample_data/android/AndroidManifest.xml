@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- Synthetic manifest for demonstrating the reviewer. Not taken from any real application. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.labapp">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <permission android:name="com.example.labapp.permission.SYNC" android:protectionLevel="normal"/>
+    <application android:label="Lab App" android:debuggable="true"
+                 android:networkSecurityConfig="@xml/network_security_config">
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".DeepLinkActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="labapp" android:host="callback"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".SettingsActivity" android:exported="false"/>
+        <service android:name=".SyncService" android:exported="true"
+                 android:permission="com.example.labapp.permission.SYNC"/>
+        <receiver android:name=".PushReceiver" android:exported="true"/>
+        <provider android:name=".NotesProvider" android:authorities="com.example.labapp.notes"
+                  android:exported="true"/>
+    </application>
+</manifest>
