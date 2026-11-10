@@ -1,17 +1,17 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "tool": "nmap-xml-analyser",
-  "generated_at": "2026-11-10T12:06:03+00:00",
+  "generated_at": "2026-11-10T12:22:16+00:00",
   "target": "sample_data/nmap-sample.xml",
   "findings": [
     {
-      "title": "Review exposed microsoft-ds port 445",
+      "title": "Review exposed TCP 445 (SMB port; Nmap service: microsoft-ds)",
       "severity": "MEDIUM",
-      "description": "SMB is exposed; verify network restrictions, patching and share permissions.",
-      "evidence": "Host: 192.0.2.10; port: 445/tcp; service: microsoft-ds; product/version: None None",
-      "recommendation": "Confirm business need, restrict source networks, harden service configuration and validate patch level.",
+      "description": "TCP 445 is conventionally used by SMB; verify network restrictions, patching and share permissions. Nmap identified the service as 'microsoft-ds'.",
+      "evidence": "Host: 192.0.2.10; port: 445/tcp; service: microsoft-ds; product/version: not identified",
+      "recommendation": "Confirm business need, restrict source networks, harden configuration and validate patch level.",
       "source": "Nmap XML",
-      "confidence": "Exposure indicator only; not proof of vulnerability"
+      "confidence": "Exposure indicator from the scan's vantage point; not proof of vulnerability"
     }
   ],
   "hosts": [
@@ -22,6 +22,7 @@
       "hostnames": [
         "lab.example.test"
       ],
+      "in_scope": true,
       "open_ports": [
         {
           "protocol": "tcp",
@@ -47,5 +48,7 @@
       ]
     }
   ],
+  "parse_warnings": [],
+  "scan_args": "nmap -sV -oX sample.xml 192.0.2.10",
   "note": "Open ports are exposure observations, not confirmed vulnerabilities. Validate service context manually."
 }
